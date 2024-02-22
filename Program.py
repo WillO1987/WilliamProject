@@ -11,7 +11,10 @@ GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 BLUE     = (   0,   0, 255)
 YELLOW = (255 , 255, 0)
-size = (700, 500)
+
+screen_width = 700
+screen_height = 500
+size = (screen_width, screen_height)
 moveSide = 0
 moveUp = 0
 screen = pygame.display.set_mode(size)
@@ -99,12 +102,27 @@ class Player(pygame.sprite.Sprite):
  
 all_sprites = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
-item_sprite = pygame.sprite.Group()
+block_list = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
 
 player = Player(10, 10 , x_val , y_val )
 player_sprite.add(player)
 all_sprites.add(player)
+
+
+
+for i in range(50):
+    # This represents a block
+    block = Block(BLACK, 20, 15)
+
+    # Set a random location for the block
+    block.rect.x = random.randrange(screen_width)
+    block.rect.y = random.randrange(screen_height)
+
+    # Add the block to the list of objects
+    block_list.add(block)
+    all_sprites.add(block)
+
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
