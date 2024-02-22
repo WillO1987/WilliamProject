@@ -139,6 +139,8 @@ while not done:
             
 
                player.carry_Item_List = item_hit_list
+               if(len(player.carry_Item_List) > 1 ):
+                    player.carry_Item_List = [] #if player is already carrying an object it cannot pick up another. 
 
             if event.key == pygame.K_BACKSPACE:
 
