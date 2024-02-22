@@ -129,7 +129,22 @@ while not done:
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
- 
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+
+            
+
+               item_hit_list = pygame.sprite.spritecollide(player, block_list, False)
+
+            
+
+               player.carry_Item_List = item_hit_list
+
+            if event.key == pygame.K_BACKSPACE:
+
+            
+
+               player.carry_Item_List = []
     # --- Game logic should go here
     player_diff_x = player.diff_x
     player_diff_y = player.diff_y
