@@ -27,6 +27,21 @@ y_offset = 0
 pi= 3.141592652
 counter = 0
 
+# create a Block object for testing :
+class Block(pygame.sprite.Sprite):
+
+    def __init__(self, color, width, height):
+
+        # Call the parent class (Sprite) constructor
+        super().__init__()
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+
+        self.rect = self.image.get_rect()
+
+
+
  
 # -------- Main Program Loop -----------
 while not done:
