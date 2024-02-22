@@ -113,7 +113,10 @@ while not done:
             done = True # Flag that we are done so we exit this loop
  
     # --- Game logic should go here
- 
+    player_diff_x = player.diff_x
+    player_diff_y = player.diff_y
+    all_sprites.update()
+   
     # --- Drawing code should go here
  
     # First, clear the screen to white. Don't put other drawing commands
@@ -125,7 +128,8 @@ while not done:
     
     
     #draw stuff here:
-
+    all_sprites.draw(screen)
+    player_sprite.draw(screen)
     
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
