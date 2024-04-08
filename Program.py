@@ -134,19 +134,23 @@ while not done:
 
             
 
-               item_hit_list = pygame.sprite.spritecollide(player, block_list, False)
+               item_hit_list = pygame.sprite.spritecollide(player, block_list, True)
 
             
 
                player.carry_Item_List = item_hit_list
-               if(len(player.carry_Item_List) > 1 ):
-                    player.carry_Item_List = [] #if player is already carrying an object it cannot pick up another. 
-
+           
+            #    if(len(player.carry_Item_List) > 1 ):
+            #         player.carry_Item_List = [] #if player is already carrying an object it cannot pick up another. 
+            #         item_hit_list = pygame.sprite.spritecollide(player, block_list, False)
+            #        # player.carry_Item_List = item_hit_list 
             if event.key == pygame.K_BACKSPACE:
-
+                if len(player.carry_Item_List) > 0:
+                    block = player.carry_Item_List[-1]  # Gets the last block from inventory
+                    block_list.add(block)  # Adds it back to the block_list
+                    all_sprites.add(block)  # Adds it back to all_sprites
+                    player.carry_Item_List.remove(block)  # Removes it from player's inventory
             
-
-               player.carry_Item_List = []
     # --- Game logic should go here
     player_diff_x = player.diff_x
     player_diff_y = player.diff_y
