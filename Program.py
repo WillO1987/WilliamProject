@@ -1,6 +1,8 @@
 import pygame
 import math
 import random
+
+
 # Initialize the game engine
 pygame.init()
 
@@ -11,6 +13,7 @@ GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 BLUE     = (   0,   0, 255)
 YELLOW = (255 , 255, 0)
+BROWN =  (165, 42 , 42)
 
 screen_width = 700
 screen_height = 500
@@ -47,6 +50,17 @@ class Block(pygame.sprite.Sprite):
 
 
 #endclass
+        
+class FarmTile(pygame.sprite.Sprite):
+    def __init__(self, color, width, height):
+        super().__init__()
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+    #endconstructor
+#endclass
+        
+
 #adding a Player class that can interact with the Block objects 
 class Player(pygame.sprite.Sprite):
     carry_Item_List = []
@@ -105,6 +119,35 @@ wall_list = pygame.sprite.Group()
 block_list = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
 
+farmtile_group = pygame.sprite.Group()
+
+grid_rows = 5
+grid_columns = 5
+tile_size = 40  # Size of each Farmtile
+grid_spacing = 15  # Spacing between Farmtiles
+
+# Spawn Farmtiles in a grid pattern
+for row in range(grid_rows):
+    for col in range(grid_columns):
+        # Calculate position for each Farmtile
+        x = col * (tile_size + grid_spacing)
+        y = row * (tile_size + grid_spacing)
+        
+        # Create Farmtile sprite
+        farmtile = FarmTile(BROWN, tile_size, tile_size)
+        farmtile.rect.x = x
+        farmtile.rect.y = y
+        # Add Farmtile sprite to sprite group
+        farmtile_group.add(farmtile)
+
+# Adding Farmtile sprites to all_sprites 
+all_sprites.add(farmtile_group)
+
+
+
+
+
+
 player = Player(10, 10 , x_val , y_val )
 player_sprite.add(player)
 all_sprites.add(player)
@@ -139,11 +182,7 @@ while not done:
             
 
                player.carry_Item_List = item_hit_list
-           
-            #    if(len(player.carry_Item_List) > 1 ):
-            #         player.carry_Item_List = [] #if player is already carrying an object it cannot pick up another. 
-            #         item_hit_list = pygame.sprite.spritecollide(player, block_list, False)
-            #        # player.carry_Item_List = item_hit_list 
+        
             if event.key == pygame.K_BACKSPACE:
                 if len(player.carry_Item_List) > 0:
                     block = player.carry_Item_List[-1]  # Gets the last block from inventory
