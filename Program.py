@@ -166,6 +166,8 @@ for i in range(50):
     block_list.add(block)
     all_sprites.add(block)
 
+
+    
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
@@ -174,18 +176,20 @@ while not done:
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                player.carry_Item_List = player.carry_Item_List
+                if len(player.carry_Item_List) >=1:
+                    pass
+                else:
 
-            
+                    item_hit_list = pygame.sprite.spritecollide(player, block_list, True)
 
-               item_hit_list = pygame.sprite.spritecollide(player, block_list, True)
 
-            
-
-               player.carry_Item_List = item_hit_list
+            #    if len(player.carry_Item_List) < 1:
+                    player.carry_Item_List = item_hit_list
         
             if event.key == pygame.K_BACKSPACE:
                 if len(player.carry_Item_List) > 0:
-                    block = player.carry_Item_List[-1]  # Gets the last block from inventory
+                    block = player.carry_Item_List[(len(player.carry_Item_List) -1)]  # Gets the last block from inventory
                     block_list.add(block)  # Adds it back to the block_list
                     all_sprites.add(block)  # Adds it back to all_sprites
                     player.carry_Item_List.remove(block)  # Removes it from player's inventory
