@@ -48,7 +48,16 @@ class Block(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
+#endclass
 
+class WateringCan(pygame.sprite.Sprite):
+    def __init__(self, b_width , b_length):
+        super().__init__()
+        self.image = pygame.Surface((b_width, b_length))
+        self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+    def update(self) :
+        pass
 #endclass
         
 class FarmTile(pygame.sprite.Sprite):
@@ -59,7 +68,6 @@ class FarmTile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
     #endconstructor
 #endclass
-        
 
 #adding a Player class that can interact with the Block objects 
 class Player(pygame.sprite.Sprite):
@@ -152,7 +160,11 @@ player = Player(10, 10 , x_val , y_val )
 player_sprite.add(player)
 all_sprites.add(player)
 
-
+Wateringcann = WateringCan(20,15)
+block_list.add(Wateringcann)
+all_sprites.add(Wateringcann)
+Wateringcann.rect.x = random.randrange(screen_width)
+Wateringcann.rect.y = random.randrange(screen_height)
 
 for i in range(50):
     # This represents a block
@@ -175,6 +187,7 @@ while not done:
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_SPACE:
                 player.carry_Item_List = player.carry_Item_List
                 if len(player.carry_Item_List) >=1:
@@ -182,6 +195,7 @@ while not done:
                 else:
 
                     item_hit_list = pygame.sprite.spritecollide(player, block_list, True)
+                
 
 
             #    if len(player.carry_Item_List) < 1:
@@ -193,7 +207,8 @@ while not done:
                     block_list.add(block)  # Adds it back to the block_list
                     all_sprites.add(block)  # Adds it back to all_sprites
                     player.carry_Item_List.remove(block)  # Removes it from player's inventory
-            
+    
+           
     # --- Game logic should go here
     player_diff_x = player.diff_x
     player_diff_y = player.diff_y
