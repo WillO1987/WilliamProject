@@ -7,6 +7,7 @@ import random
 pygame.init()
 
 # Define some colors
+FERN = ( 79 , 121, 66)
 BLACK    = (   0,   0,   0)
 WHITE    = ( 255, 255, 255)
 GREEN    = (   0, 255,   0)
@@ -67,6 +68,9 @@ class FarmTile(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect()
     #endconstructor
+    def update(self):
+        pass
+
 #endclass
 
 #adding a Player class that can interact with the Block objects 
@@ -168,11 +172,11 @@ Wateringcann.rect.y = random.randrange(screen_height)
 
 for i in range(50):
     # This represents a block
-    block = Block(BLACK, 20, 15)
+    block = Block(BLACK, 15, 15)
 
     # Set a random location for the block
-    block.rect.x = random.randrange(screen_width)
-    block.rect.y = random.randrange(screen_height)
+    block.rect.x = random.randrange(200 , screen_width)
+    block.rect.y = random.randrange(200 , screen_height)
 
     # Add the block to the list of objects
     block_list.add(block)
@@ -220,7 +224,7 @@ while not done:
     # above this, or they will be erased with this command.
    
         
-    screen.fill(WHITE)
+    screen.fill(FERN)
     
     
     
