@@ -1,6 +1,10 @@
 import pygame
 import math
 import random
+import time
+
+
+
 
 
 # Initialize the game engine
@@ -72,6 +76,31 @@ class FarmTile(pygame.sprite.Sprite):
         pass
 
 #endclass
+
+class Seed(pygame.sprite.Sprite):
+    def __init__(self, type):
+        self.type = type
+        self.image = pygame.Surface(15,15)
+        self.image.fill(YELLOW)
+        self.rect = self.image.get_rect()
+#endclass
+    def grow(self):
+        self.growtime = self.growtime + 1
+        if(self.growtime == 5):
+
+            return Wheat("Wheat", 5 )
+
+
+class Wheat(pygame.sprite.Sprite):
+    def __init__(self, type, growtime):
+        self.type = type
+        self.growtime = growtime
+    
+    #endclass
+    def update(self):
+        return 0 
+    
+
 
 #adding a Player class that can interact with the Block objects 
 class Player(pygame.sprite.Sprite):
@@ -170,7 +199,7 @@ all_sprites.add(Wateringcann)
 Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
 
-for i in range(50):
+for i in range(1):
     # This represents a block
     block = Block(BLACK, 15, 15)
 
@@ -218,6 +247,9 @@ while not done:
     player_diff_y = player.diff_y
     all_sprites.update()
    
+    if pygame.sprite.spritecollide(Seed, farmtile_group):
+        all_sprites.remove()
+    
     # --- Drawing code should go here
  
     # First, clear the screen to white. Don't put other drawing commands
