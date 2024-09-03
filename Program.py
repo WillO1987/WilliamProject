@@ -255,6 +255,7 @@ while not done:
     all_sprites.update()
    
     if pygame.sprite.spritecollide(seed, farmtile_group, True):
+        print("Collided")
         all_sprites.remove()
         
     
