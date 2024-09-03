@@ -78,9 +78,9 @@ class FarmTile(pygame.sprite.Sprite):
 #endclass
 
 class Seed(pygame.sprite.Sprite):
-    def __init__(self, type):
+    def __init__(self, type, Swidth, Sheight):
         self.type = type
-        self.image = pygame.Surface(15,15)
+        self.image = pygame.Surface([Swidth,Sheight])
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
 #endclass
@@ -199,7 +199,12 @@ all_sprites.add(Wateringcann)
 Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
 wheat = "Wheat"
-seed = Seed(wheat)
+seed = Seed(wheat, 15, 15)
+
+all_sprites.add(seed)
+seed.rect.x = random.randrange(200, screen_width)
+seed.rect.y = random.randrange(200, screen_height)
+block_list.add(seed)
 for i in range(1):
     # This represents a block
     block = Block(BLACK, 15, 15)
@@ -248,8 +253,9 @@ while not done:
     player_diff_y = player.diff_y
     all_sprites.update()
    
-    if pygame.sprite.spritecollide(Seed, farmtile_group):
+    if pygame.sprite.spritecollide(seed, farmtile, True):
         all_sprites.remove()
+        
     
     # --- Drawing code should go here
  
