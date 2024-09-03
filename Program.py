@@ -198,7 +198,8 @@ block_list.add(Wateringcann)
 all_sprites.add(Wateringcann)
 Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
-
+wheat = "Wheat"
+seed = Seed(wheat)
 for i in range(1):
     # This represents a block
     block = Block(BLACK, 15, 15)
