@@ -183,7 +183,7 @@ for row in range(grid_rows):
         farmtile_group.add(farmtile)
 
 # Adding Farmtile sprites to all_sprites 
-all_sprites.add(farmtile)
+all_sprites.add(farmtile_group)
 
 
 
