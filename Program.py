@@ -79,6 +79,7 @@ class FarmTile(pygame.sprite.Sprite):
 
 class Seed(pygame.sprite.Sprite):
     def __init__(self, type, Swidth, Sheight):
+        super().__init__()
         self.type = type
         self.image = pygame.Surface([Swidth,Sheight])
         self.image.fill(YELLOW)
@@ -182,7 +183,7 @@ for row in range(grid_rows):
         farmtile_group.add(farmtile)
 
 # Adding Farmtile sprites to all_sprites 
-all_sprites.add(farmtile_group)
+all_sprites.add(farmtile)
 
 
 
@@ -253,7 +254,7 @@ while not done:
     player_diff_y = player.diff_y
     all_sprites.update()
    
-    if pygame.sprite.spritecollide(seed, farmtile, True):
+    if pygame.sprite.spritecollide(seed, farmtile_group, True):
         all_sprites.remove()
         
     
