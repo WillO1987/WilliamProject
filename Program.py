@@ -55,6 +55,23 @@ class Block(pygame.sprite.Sprite):
 
 #endclass
 
+class enemy(pygame.sprite.Sprite):
+    def __init__(self, name , health, damagelvl):
+        self.name = name 
+        self.health = health
+        self.damagelvl = damagelvl
+
+        self.image = pygame.Surface(([25, 25]))
+        self.image.fill(BLACK)
+        self.rect = self.image.get_rect()
+    def update(self) :
+        pass
+    def attack():
+        pass
+    
+#endclass
+
+
 class WateringCan(pygame.sprite.Sprite):
     def __init__(self, b_width , b_length):
         super().__init__()
