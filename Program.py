@@ -40,6 +40,10 @@ y_offset = 0
 pi= 3.141592652
 counter = 0
 
+def replaceObject(object1,object2):
+    pass
+
+
 # create a Block object for testing :
 class Block(pygame.sprite.Sprite):
 
@@ -68,7 +72,7 @@ class enemy(pygame.sprite.Sprite):
         pass
     def attack():
         pass
-    
+
 #endclass
 
 
@@ -251,7 +255,7 @@ while not done:
                     pass
                 else:
 
-                    item_hit_list = pygame.sprite.spritecollide(player, block_list, True)
+                    item_hit_list = pygame.sprite.spritecollide(player, block_list, False) # true
                 
 
 
@@ -271,9 +275,16 @@ while not done:
     player_diff_y = player.diff_y
     all_sprites.update()
    
-    if pygame.sprite.spritecollide(seed, farmtile_group, True):
+    if pygame.sprite.spritecollide(seed, farmtile_group, False):#true
         print("Collided")
+        farmtile2x = farmtile.rect.x 
+        farmtile2y = farmtile.rect.y
+        farmtile2 = FarmTile(YELLOW, tile_size, tile_size)
+        farmtile2.rect.x = farmtile2x
+        farmtile2.rect.y = farmtile2y
+        all_sprites.add(farmtile2)
         all_sprites.remove()
+
         
     
     # --- Drawing code should go here
