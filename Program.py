@@ -181,6 +181,7 @@ all_sprites = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 block_list = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
+enemy_list = pygame.sprite.Group()
 
 farmtile_group = pygame.sprite.Group()
 
@@ -209,7 +210,9 @@ all_sprites.add(farmtile_group)
 
 
 
-
+zombie1 = enemy("Zombie", 100, 1)
+enemy_list.add(zombie1)
+all_sprites.add(enemy_list)
 
 player = Player(10, 10 , x_val , y_val )
 player_sprite.add(player)
