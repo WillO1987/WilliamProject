@@ -59,8 +59,9 @@ class Block(pygame.sprite.Sprite):
 
 #endclass
 
-class enemy(pygame.sprite.Sprite):
-    def __init__(self, name , health, damagelvl):
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, name, health, damagelvl):
+        pygame.sprite.Sprite.__init__(self)
         self.name = name 
         self.health = health
         self.damagelvl = damagelvl
@@ -210,7 +211,7 @@ all_sprites.add(farmtile_group)
 
 
 
-zombie1 = enemy("Zombie", 100, 1)
+zombie1 = Enemy("Zombie", 100, 1)
 enemy_list.add(zombie1)
 all_sprites.add(enemy_list)
 
