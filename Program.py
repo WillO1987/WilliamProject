@@ -288,6 +288,7 @@ while not done:
         farmtile2.rect.y = farmtile2y
         all_sprites.add(farmtile2)
         all_sprites.remove()
+        seed.kill()
 
         
     
