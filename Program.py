@@ -44,6 +44,43 @@ def replaceObject(object1,object2):
     pass
 
 
+
+class SEEDButton(pygame.sprite.Sprite):
+    def __init__(self,xcoord,ycoord, text, colour, Single_click):
+        super.__init__()
+        self.clicked = False
+        self.x = xcoord
+        self.y = ycoord
+        
+        self.image = pygame.Surface([50, 20])
+        self.image.fill(colour)
+
+        self.rect = self.image.get_rect()
+        self.single_click = Single_click # prevents when the mouse collides with button from it getting pressed multiple times.
+
+    def draw(self, surface):
+        MousePosition = pygame.mouse.get_pos()
+        if self.rect.collidepoint(MousePosition):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False: 
+                global seed 
+                seed = Seed(wheat, 15, 15)
+                all_sprites.add(seed)
+                seed.rect.x = random.randrange(200, screen_width)
+                seed.rect.y = random.randrange(200, screen_height)
+                block_list.add(seed)
+                if self.single_click:
+                    self.clicked = True
+                #endif
+            #endif
+            if pygame.mouse.get_pressed()[0] == 0:
+                self.clicked = False
+            #endif
+        #endif
+
+        
+
+
+
 # create a Block object for testing :
 class Block(pygame.sprite.Sprite):
 
@@ -93,9 +130,13 @@ class FarmTile(pygame.sprite.Sprite):
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
+        
     #endconstructor
     def update(self):
         pass
+    def agefarmland(self):
+        pass
+
 
 #endclass
 
@@ -190,7 +231,7 @@ grid_rows = 5
 grid_columns = 5
 tile_size = 40  # Size of each Farmtile
 grid_spacing = 15  # Spacing between Farmtiles
-
+    
 # Spawn Farmtiles in a grid pattern
 for row in range(grid_rows):
     for col in range(grid_columns):
@@ -225,12 +266,14 @@ all_sprites.add(Wateringcann)
 Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
 wheat = "Wheat"
-seed = Seed(wheat, 15, 15)
 
-all_sprites.add(seed)
-seed.rect.x = random.randrange(200, screen_width)
-seed.rect.y = random.randrange(200, screen_height)
-block_list.add(seed)
+# seed = Seed(wheat, 15, 15)
+
+# all_sprites.add(seed)
+# seed.rect.x = random.randrange(200, screen_width)
+# seed.rect.y = random.randrange(200, screen_height)
+# block_list.add(seed)
+
 for i in range(1):
     # This represents a block
     block = Block(BLACK, 15, 15)
@@ -280,7 +323,7 @@ while not done:
     all_sprites.update()
    
     if pygame.sprite.spritecollide(seed, farmtile_group, False):#true
-        print("Collided")
+        #print("Collided")
         farmtile2x = farmtile.rect.x 
         farmtile2y = farmtile.rect.y
         farmtile2 = FarmTile(YELLOW, tile_size, tile_size)
