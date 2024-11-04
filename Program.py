@@ -364,6 +364,9 @@ while not done:
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            target_x, target_y = pygame.mouse.get_pos()
+            player.fire_gun(target_x, target_y)
         elif event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_SPACE:
