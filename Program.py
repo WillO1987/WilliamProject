@@ -7,6 +7,7 @@ import time
 
 
 
+
 # Initialize the game engine
 pygame.init()
 
@@ -188,7 +189,32 @@ class Wheat(pygame.sprite.Sprite):
     #endclass
     def update(self):
         return 0 
+
+class Bullet(pygame.sprite.Sprite):
+     def __init__(self,x , y , angle ):
+         super().__init__()
+         self.image = pygame.Surface([10,4])
+         self.image.fill(WHITE)
+         self.rect = self.image.get_rect()
+         self.rect.center = (x,y)
+         self.angle = angle 
+         self.speed = 10
+     def update(self):
+        self.rect.x += self.speed * math.cos(self.angle)
+        self.rect.y += self.speed * math.sin(self.angle)
+        if self.rect.right < 0 or self.rect.left > screen_width or self.rect.bottom < 0 or self.rect.top > screen_height:
+            self.kill()
+
+class Gun(pygame.sprite.Sprite):
+    def __init__(self, ):
+        super().__init__()
+        self.bullets = pygame.sprite.Group()
     
+    def fire(self, x , y, target_x, target_y):
+        angle = math.atan2(target_y - y, target_x - x)
+        bullet = Bullet(x, y , angle)
+        self.bullets.add(bullet)
+        all_sprites.add(bullet)
 
 
 #adding a Player class that can interact with the Block objects 
@@ -207,6 +233,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = initial_y
         self.diff_x = 0
         self.diff_y = 0
+        self.Gun = Gun()
 
         
     def update(self):
@@ -231,6 +258,9 @@ class Player(pygame.sprite.Sprite):
             item.rect.x += self.diff_x
             item.rect.y += self.diff_y
         
+
+        self.Gun.bullets.update()
+        
         # Check for collisions with walls
         wall_collisions = pygame.sprite.spritecollide(self, wall_list, False)
         for wall in wall_collisions:
@@ -242,6 +272,8 @@ class Player(pygame.sprite.Sprite):
                 self.rect.bottom = wall.rect.top
             elif moveUp < 0:
                 self.rect.top = wall.rect.bottom
+    def fire_gun(self, target_x, target_y): 
+        self.gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
 
 def seed_collision(seed, farmtile_group):
     if pygame.sprite.spritecollide(seed, farmtile_group, False):    
