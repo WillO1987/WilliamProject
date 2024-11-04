@@ -108,7 +108,31 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill(BLACK)
         self.rect = self.image.get_rect()
     def update(self) :
-        pass
+        self.move_towards_farmtile()
+    def move_towards_farmtile(self):
+        closestTile = None
+        minDist = float()
+        for farmtile in farmtile_group:
+            distance = self.calculateDist(farmtile.rect.x, farmtile.rect.y)
+            if distance < minDist:
+                closestTile = farmtile
+                minDist = distance
+            
+        if closestTile != None:
+            if self.rect.x < closestTile.rect.x:
+                self.rect.x += 1
+            if self.rect.x > closestTile.rect.x:
+                self.rect.x -= 1 
+            if self.rect.y < closestTile.rect.y:
+                self.rect.y += 1 
+            if self.rect.y < closestTile.rect.y:
+                self.rect.y -= 1 
+    
+    def calculateDist(self, x, y):
+        return abs(self.rect.x - x) + abs(self.rect.y -y)
+            
+
+
     def attack():
         pass
 
