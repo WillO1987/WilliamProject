@@ -72,15 +72,17 @@ class SEEDButton(pygame.sprite.Sprite):
     def handle_click(self):
         global seed
         if not self.clicked and pygame.mouse.get_pressed()[0]:
-            seed = Seed("Wheat", 15, 15)
-            seed.rect.topleft = (random.randint(200, screen_width - 15),
-                                 random.randint(200, screen_height - 15))
-            block_list.add(seed)
-            all_sprites.add(seed)
-            if self.single_click:
-                self.clicked = True
-        if not pygame.mouse.get_pressed()[0]:
-            self.clicked = False
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if self.rect.collidepoint(mouse_x, mouse_y):  # Only respond if the click is inside the button
+                seed = Seed("Wheat", 15, 15)
+                seed.rect.topleft = (random.randint(200, screen_width - 15),
+                                    random.randint(200, screen_height - 15))
+                block_list.add(seed)
+                all_sprites.add(seed)
+                if self.single_click:
+                    self.clicked = True
+            if not pygame.mouse.get_pressed()[0]:
+                self.clicked = False
 
 
 
@@ -346,7 +348,7 @@ Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
 wheat = "Wheat"
 
-Sbutton1 = SEEDButton(10, 10, "Seed", YELLOW, True)
+Sbutton1 = SEEDButton(300, 100, "Seed", YELLOW, True)
 # seed = Seed(wheat, 400, 300)
 
 # all_sprites.add(seed)
