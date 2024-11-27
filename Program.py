@@ -278,17 +278,25 @@ class Player(pygame.sprite.Sprite):
         self.Gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
 
 def seed_collision(seed, farmtile_group):
-    if pygame.sprite.spritecollide(seed, farmtile_group, False):    
-        for farmtile in farmtile_group:
-            # if pygame.sprite.collide_rect(seed, farmtile):    
-                farmtile2x = farmtile.rect.x 
-                farmtile2y = farmtile.rect.y
-                farmtile2 = FarmTile(YELLOW, tile_size, tile_size)
-                farmtile2.rect.x = farmtile2x
-                farmtile2.rect.y = farmtile2y
-                all_sprites.add(farmtile2)
-                all_sprites.remove()
-                seed.kill()
+    # Check if the seed collides with any farm tile
+    collided_tiles = pygame.sprite.spritecollide(seed, farmtile_group, False)
+    if collided_tiles:  
+        for farmtile in collided_tiles:
+            # Replace the farm tile with a "planted" state
+            planted_tile = FarmTile(YELLOW, tile_size, tile_size)
+            planted_tile.rect.x = farmtile.rect.x
+            planted_tile.rect.y = farmtile.rect.y
+            
+            # Add the planted tile to the game
+            all_sprites.add(planted_tile)
+            farmtile_group.add(planted_tile)
+            
+            # Remove the old tile
+            all_sprites.remove(farmtile)
+            farmtile_group.remove(farmtile)
+        
+        # Remove the seed from the game
+        seed.kill()
 
 all_sprites = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
@@ -401,6 +409,9 @@ while not done:
    
     #seed_collision(seed, farmtile_group)
 
+    for seed in block_list:
+        if isinstance(seed, Seed):  # Check if the object is a Seed
+            seed_collision(seed, farmtile_group)
         
     
     # --- Drawing code should go here
