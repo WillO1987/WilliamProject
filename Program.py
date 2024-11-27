@@ -60,26 +60,28 @@ class SEEDButton(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.single_click = Single_click # prevents when the mouse collides with button from it getting pressed multiple times.
 
-    def draw(self):
-        MousePosition = pygame.mouse.get_pos()
-        if self.rect.collidepoint(MousePosition):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False: 
-                global seed 
-                seed = Seed("Wheat", 15, 15)
-                all_sprites.add(seed)
-                seed.rect.x = random.randrange(200, screen_width)
-                seed.rect.y = random.randrange(200, screen_height)
-                block_list.add(seed)
-                if self.single_click:
-                    self.clicked = True
-                #endif
-            #endif
-            if pygame.mouse.get_pressed()[0] == 0:
-                self.clicked = False
-            #endif
-        #endif
 
-        
+    def draw(self, screen):
+        # Draw the button
+        screen.blit(self.image, self.rect)
+        font = pygame.font.Font(None, 24)
+        text_surface = font.render(self.text, True, BLACK)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
+
+    def handle_click(self):
+        global seed
+        if not self.clicked and pygame.mouse.get_pressed()[0]:
+            seed = Seed("Wheat", 15, 15)
+            seed.rect.topleft = (random.randint(200, screen_width - 15),
+                                 random.randint(200, screen_height - 15))
+            block_list.add(seed)
+            all_sprites.add(seed)
+            if self.single_click:
+                self.clicked = True
+        if not pygame.mouse.get_pressed()[0]:
+            self.clicked = False
+
 
 
 
@@ -273,7 +275,7 @@ class Player(pygame.sprite.Sprite):
             elif moveUp < 0:
                 self.rect.top = wall.rect.bottom
     def fire_gun(self, target_x, target_y): 
-        self.gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
+        self.Gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
 
 def seed_collision(seed, farmtile_group):
     if pygame.sprite.spritecollide(seed, farmtile_group, False):    
@@ -336,7 +338,7 @@ Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
 wheat = "Wheat"
 
-Sbutton1 = SEEDButton(100, 100, "Press For seed", YELLOW, 1)
+Sbutton1 = SEEDButton(10, 10, "Seed", YELLOW, True)
 # seed = Seed(wheat, 400, 300)
 
 # all_sprites.add(seed)
@@ -355,6 +357,7 @@ for i in range(1):
     # Add the block to the list of objects
     block_list.add(block)
     all_sprites.add(block)
+    
 
 
     
@@ -394,8 +397,9 @@ while not done:
     player_diff_x = player.diff_x
     player_diff_y = player.diff_y
     all_sprites.update()
+    Sbutton1.handle_click()
    
-    seed_collision(seed, farmtile_group)
+    #seed_collision(seed, farmtile_group)
 
         
     
@@ -412,7 +416,7 @@ while not done:
     #draw stuff here:
     all_sprites.draw(screen)
     player_sprite.draw(screen)
-    
+    Sbutton1.draw(screen)
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
