@@ -12,6 +12,7 @@ import time
 pygame.init()
 
 # Define some colors
+ORANGE = (255,100,10)
 FERN = ( 79 , 121, 66)
 BLACK    = (   0,   0,   0)
 WHITE    = ( 255, 255, 255)
@@ -108,10 +109,14 @@ class Enemy(pygame.sprite.Sprite):
         self.name = name 
         self.health = health
         self.damagelvl = damagelvl
+        # self.rect.x = 300
+        # self.rect.y = 100
 
         self.image = pygame.Surface(([25, 25]))
-        self.image.fill(BLACK)
+        self.image.fill(ORANGE)
         self.rect = self.image.get_rect()
+        self.rect.x = 400
+        self.rect.y = 200
     def update(self) :
         self.move_towards_farmtile()
     def move_towards_farmtile(self):
@@ -349,13 +354,10 @@ Wateringcann.rect.y = random.randrange(screen_height)
 wheat = "Wheat"
 
 Sbutton1 = SEEDButton(300, 100, "Seed", YELLOW, True)
-# seed = Seed(wheat, 400, 300)
 
-# all_sprites.add(seed)
-# # seed.rect.x = random.randrange(200, screen_width)
-# # seed.rect.y = random.randrange(200, screen_height)
-# block_list.add(seed)
-
+enemy1 = Enemy(5, 1, 4)
+enemy_list.add(enemy1)
+all_sprites.add(enemy_list)
 for i in range(1):
     # This represents a block
     block = Block(BLACK, 15, 15)
