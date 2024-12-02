@@ -302,6 +302,12 @@ def seed_collision(seed, farmtile_group):
             # Remove the old tile
             all_sprites.remove(farmtile)
             farmtile_group.remove(farmtile)
+            if len(player.carry_Item_List) > 0:
+                    block = player.carry_Item_List[(len(player.carry_Item_List) -1)]  # Gets the last block from inventory
+                    block_list.add(block)  # Adds it back to the block_list
+                    all_sprites.add(block)  # Adds it back to all_sprites
+                    player.carry_Item_List.remove(block)  # Removes it from player's inventory
+            
         
         # Remove the seed from the game
         seed.kill()
@@ -417,6 +423,8 @@ while not done:
     for seed in block_list:
         if isinstance(seed, Seed):  # Check if the object is a Seed
             seed_collision(seed, farmtile_group)
+            
+  
         
     
     # --- Drawing code should go here
