@@ -51,14 +51,15 @@ class SEEDButton(pygame.sprite.Sprite):
     def __init__(self,xcoord,ycoord, text, colour, Single_click):
         # super.__init__()
         self.clicked = False
-        self.x = xcoord
-        self.y = ycoord
+        
         self.text = text
         
-        self.image = pygame.Surface([50, 20])
+        self.image = pygame.Surface([50,20 ])
         self.image.fill(colour)
 
         self.rect = self.image.get_rect()
+        self.rect.x = xcoord
+        self.rect.y = ycoord
         self.single_click = Single_click # prevents when the mouse collides with button from it getting pressed multiple times.
 
 
@@ -353,7 +354,7 @@ Wateringcann.rect.x = random.randrange(screen_width)
 Wateringcann.rect.y = random.randrange(screen_height)
 wheat = "Wheat"
 
-Sbutton1 = SEEDButton(300, 100, "Seed", YELLOW, True)
+Sbutton1 = SEEDButton(550, 100, "Seed", YELLOW, True)
 
 enemy1 = Enemy(5, 1, 4)
 enemy_list.add(enemy1)
