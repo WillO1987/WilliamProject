@@ -72,20 +72,17 @@ class SEEDButton(pygame.sprite.Sprite):
         screen.blit(text_surface, text_rect)
 
     def handle_click(self):
-        global seed
-        if not self.clicked and pygame.mouse.get_pressed()[0]:
+        if pygame.mouse.get_pressed()[0]:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if self.rect.collidepoint(mouse_x, mouse_y):  # Only respond if the click is inside the button
-                seed = Seed("Wheat", 15, 15)
-                seed.rect.topleft = (random.randint(200, screen_width - 15),
-                                    random.randint(200, screen_height - 15))
-                block_list.add(seed)
-                all_sprites.add(seed)
-                if self.single_click:
+            if self.rect.collidepoint(mouse_x, mouse_y):
+                if not self.clicked:
+                    seed = Seed("Wheat", 15, 15)
+                    seed.rect.topleft = (600, 15)
+                    block_list.add(seed)
+                    all_sprites.add(seed)
                     self.clicked = True
-            if not pygame.mouse.get_pressed()[0]:
-                self.clicked = False
-
+        else:
+            self.clicked = False
 
 
 
@@ -307,7 +304,7 @@ def seed_collision(seed, farmtile_group):
                     block_list.add(block)  # Adds it back to the block_list
                     all_sprites.add(block)  # Adds it back to all_sprites
                     player.carry_Item_List.remove(block)  # Removes it from player's inventory
-            
+
         
         # Remove the seed from the game
         seed.kill()
