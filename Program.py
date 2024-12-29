@@ -327,8 +327,8 @@ grid_spacing = 15  # Spacing between Farmtiles
 for row in range(grid_rows):
     for col in range(grid_columns):
         # Calculate position for each Farmtile
-        x = col * (tile_size + grid_spacing)
-        y = row * (tile_size + grid_spacing)
+        x = col * (tile_size + grid_spacing) + 140
+        y = row * (tile_size + grid_spacing) + 100
         
         # Create Farmtile sprite
         farmtile = FarmTile(BROWN, tile_size, tile_size)
