@@ -30,6 +30,8 @@ moveUp = 0
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Project: ")
 
+score = 0
+
 # Loop until the user clicks the close button.
 done = False
  
@@ -284,6 +286,7 @@ class Player(pygame.sprite.Sprite):
         self.Gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
 
 def seed_collision(seed, farmtile_group):
+    global score
     # Check if the seed collides with any farm tile
     collided_tiles = pygame.sprite.spritecollide(seed, farmtile_group, False)
     if collided_tiles:  
@@ -296,6 +299,7 @@ def seed_collision(seed, farmtile_group):
             # Add the planted tile to the game
             all_sprites.add(planted_tile)
             farmtile_group.add(planted_tile)
+            score = score + 10
             
             # Remove the old tile
             all_sprites.remove(farmtile)
@@ -439,6 +443,19 @@ while not done:
     all_sprites.draw(screen)
     player_sprite.draw(screen)
     Sbutton1.draw(screen)
+    font = pygame.font.Font(None, 36)  
+
+
+    score_text = font.render(f"Score: {score}", True, WHITE)  
+
+    #place in the corner
+    text_rect = score_text.get_rect()
+    text_rect.topright = (screen_width - 10, 10)  
+    
+    screen.blit(score_text, text_rect)
+
+
+
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
