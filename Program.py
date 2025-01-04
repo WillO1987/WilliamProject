@@ -163,15 +163,32 @@ class WateringCan(pygame.sprite.Sprite):
 class FarmTile(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
         super().__init__()
+        self.color = color
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
+        self.contains_crop = False
+        self.isreadytoharvest = False
+        self.watered = False
         
     #endconstructor
     def update(self):
-        pass
-    def agefarmland(self):
-        pass
+        if self.color == YELLOW:
+            self.contains_crop = True
+            
+        
+    def growcrop(self):
+        if self.contains_crop and self.watered and not self.isreadytoharvest:
+            self.readytoharvest = True
+            self.image.fill(WHITE) 
+    def harvestcrop(self):
+        if self.isreadytoharvest:
+            self.contains_crop = False
+            self.watered = False
+            self.isreadytoharvest = False
+            self.image.fill(BROWN)
+            return True
+        return False
 
 
 #endclass
@@ -285,6 +302,14 @@ class Player(pygame.sprite.Sprite):
     def fire_gun(self, target_x, target_y): 
         self.Gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
 
+    def harvest(self):
+        global score
+        collided_tiles = pygame.sprite.spritecollide(self, farmtile_group, False)
+        for farmtile in collided_tiles:
+            if farmtile.harvestcrop():
+                score += 20
+
+
 def seed_collision(seed, farmtile_group):
     global score
     # Check if the seed collides with any farm tile
@@ -379,7 +404,10 @@ for i in range(1):
     block_list.add(block)
     all_sprites.add(block)
     
-
+def water_collision(watering_can, farmtile_group):
+    collided_tiles = pygame.sprite.spritecollide(watering_can, farmtile_group, False)
+    for farmtile in collided_tiles:
+        farmtile.watered = True
 
     
 # -------- Main Program Loop -----------
@@ -412,7 +440,13 @@ while not done:
                     block_list.add(block)  # Adds it back to the block_list
                     all_sprites.add(block)  # Adds it back to all_sprites
                     player.carry_Item_List.remove(block)  # Removes it from player's inventory
-    
+                    if isinstance(block, WateringCan):
+                        water_collision(block, farmtile_group)
+
+            if event.key == pygame.K_h:  # Harvest crops
+                player.harvest()
+                    # score += 20
+            
            
     # --- Game logic should go here
     player_diff_x = player.diff_x
@@ -420,13 +454,17 @@ while not done:
     all_sprites.update()
     Sbutton1.handle_click()
    
+   
     #seed_collision(seed, farmtile_group)
 
     for seed in block_list:
         if isinstance(seed, Seed):  # Check if the object is a Seed
             seed_collision(seed, farmtile_group)
-            
-  
+    
+    for farmtile in farmtile_group:
+        if farmtile.watered and farmtile.contains_crop:
+            farmtile.growcrop()
+
         
     
     # --- Drawing code should go here
@@ -442,6 +480,8 @@ while not done:
     #draw stuff here:
     all_sprites.draw(screen)
     player_sprite.draw(screen)
+    block_list.draw(screen)
+    enemy_list.draw(screen)
     Sbutton1.draw(screen)
     font = pygame.font.Font(None, 36)  
 
