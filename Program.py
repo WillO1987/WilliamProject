@@ -179,7 +179,7 @@ class FarmTile(pygame.sprite.Sprite):
         
     def growcrop(self):
         if self.contains_crop and self.watered and not self.isreadytoharvest:
-            self.readytoharvest = True
+            self.isreadytoharvest = True
             self.image.fill(WHITE) 
     def harvestcrop(self):
         if self.isreadytoharvest:
@@ -304,10 +304,12 @@ class Player(pygame.sprite.Sprite):
 
     def harvest(self):
         global score
+        global farmtile
         collided_tiles = pygame.sprite.spritecollide(self, farmtile_group, False)
         for farmtile in collided_tiles:
-            if farmtile.harvestcrop():
-                score += 20
+                if farmtile.watered ==  True and farmtile.isreadytoharvest:
+                    farmtile.harvestcrop()
+                    score += 20
 
 
 def seed_collision(seed, farmtile_group):
