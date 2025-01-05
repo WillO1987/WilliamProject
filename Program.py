@@ -238,6 +238,7 @@ class Gun(pygame.sprite.Sprite):
         self.bullets = pygame.sprite.Group()
     
     def fire(self, x , y, target_x, target_y):
+        global bullet
         angle = math.atan2(target_y - y, target_x - x)
         bullet = Bullet(x, y , angle)
         self.bullets.add(bullet)
@@ -456,6 +457,8 @@ while not done:
     all_sprites.update()
     Sbutton1.handle_click()
    
+
+    hits = pygame.sprite.groupcollide(enemy_list, player.Gun.bullets, True, True)
    
     #seed_collision(seed, farmtile_group)
 
