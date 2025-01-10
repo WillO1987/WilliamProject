@@ -123,7 +123,7 @@ class Enemy(pygame.sprite.Sprite):
         closestTile = None
         minDist = float('inf')
         for farmtile in farmtile_group:
-            if farmtile.image.get_at((0, 0)) == YELLOW or WHITE:
+            if farmtile.image.get_at((0, 0)) == YELLOW or farmtile.image.get_at((0, 0)) == WHITE:
                 distance = self.calculateDist(farmtile.rect.x, farmtile.rect.y)
                 if distance < minDist:
                     closestTile = farmtile
