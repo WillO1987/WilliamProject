@@ -123,7 +123,7 @@ class Enemy(pygame.sprite.Sprite):
         closestTile = None
         minDist = float('inf')
         for farmtile in farmtile_group:
-            if farmtile.image.get_at((0, 0)) == YELLOW:
+            if farmtile.image.get_at((0, 0)) == YELLOW or WHITE:
                 distance = self.calculateDist(farmtile.rect.x, farmtile.rect.y)
                 if distance < minDist:
                     closestTile = farmtile
@@ -413,6 +413,31 @@ def water_collision(watering_can, farmtile_group):
         farmtile.watered = True
 
     
+
+
+waveIntervals = 15000
+
+lastwave = pygame.time.get_ticks()
+
+def wavesspawning():
+    screenedges = ['top', 'bottom' , 'left' , 'right']
+    for _ in range(5):  # Number of enemies per wave
+        edge = random.choice(screenedges)
+        if edge == 'top':
+            x, y = random.randint(0, screen_width), 0
+        elif edge == 'bottom':
+            x, y = random.randint(0, screen_width), screen_height
+        elif edge == 'left':
+            x, y = 0, random.randint(0, screen_height)
+        elif edge == 'right':
+            x, y = screen_width, random.randint(0, screen_height)
+
+        enemy = Enemy("Zombie", 100, 1)
+        enemy.rect.x = x
+        enemy.rect.y = y
+        enemy_list.add(enemy)
+        all_sprites.add(enemy)
+
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
@@ -450,15 +475,24 @@ while not done:
                 player.harvest()
                     # score += 20
             
-           
+        current_time = pygame.time.get_ticks()
+    
+        if current_time - lastwave >= waveIntervals:
+            wavesspawning()
+            lastwave = current_time
+
+    
     # --- Game logic should go here
     player_diff_x = player.diff_x
     player_diff_y = player.diff_y
     all_sprites.update()
     Sbutton1.handle_click()
    
-
+    
+    #kills enemeys.
     hits = pygame.sprite.groupcollide(enemy_list, player.Gun.bullets, True, True)
+    
+    
    
     #seed_collision(seed, farmtile_group)
 
