@@ -43,6 +43,7 @@ x_offset = 0
 y_offset = 0
 pi= 3.141592652
 counter = 0
+game_over = False
 
 def replaceObject(object1,object2):
     pass
@@ -342,6 +343,36 @@ def seed_collision(seed, farmtile_group):
         # Remove the seed from the game
         seed.kill()
 
+
+start_time = 180
+elapsed_time = 0
+
+
+def timer(elapsed_time):
+    remaining_time = max(start_time - elapsed_time, 0)
+    minutes = remaining_time // 60
+    seconds = remaining_time % 60
+    time_text = f"Time: {minutes:02}:{seconds:02}"
+    font = pygame.font.Font(None, 36)
+    timer_surface = font.render(time_text, True, WHITE)
+    screen.blit(timer_surface, (10, 10))
+#endfunction
+
+def Endscreen():
+    screen.fill(BLACK)
+    font = pygame.font.Font(None, 74)
+    text_surface = font.render("Game Over", True, WHITE)
+    score_surface = font.render(f"Final Score: {score}", True, WHITE)
+    # Center the text
+    text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
+    score_rect = score_surface.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+
+    screen.blit(text_surface, text_rect)
+    screen.blit(score_surface, score_rect)
+    pygame.display.flip()
+    pygame.time.wait(3000)
+
+
 all_sprites = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 block_list = pygame.sprite.Group()
@@ -480,6 +511,15 @@ while not done:
         if current_time - lastwave >= waveIntervals:
             wavesspawning()
             lastwave = current_time
+        if not game_over:
+                current_ticks = pygame.time.get_ticks()
+                elapsed_time = current_ticks // 1000
+                
+
+        if elapsed_time >= start_time:
+            game_over = True
+            Endscreen(score)
+            break
 
     
     # --- Game logic should go here
@@ -533,6 +573,9 @@ while not done:
     
     screen.blit(score_text, text_rect)
 
+
+    timer(elapsed_time)
+    
 
 
     # --- Go ahead and update the screen with what we've drawn.
