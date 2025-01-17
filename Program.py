@@ -472,6 +472,8 @@ def wavesspawning():
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
+    current_ticks = pygame.time.get_ticks()
+    elapsed_time = (current_ticks- start_time)// 1000
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
@@ -506,14 +508,11 @@ while not done:
                 player.harvest()
                     # score += 20
             
-        current_time = pygame.time.get_ticks()
+        
     
-        if current_time - lastwave >= waveIntervals:
+        if current_ticks - lastwave >= waveIntervals:
             wavesspawning()
-            lastwave = current_time
-        if not game_over:
-                current_ticks = pygame.time.get_ticks()
-                elapsed_time = current_ticks // 1000
+            lastwave = current_ticks
                 
 
         if elapsed_time >= start_time:
