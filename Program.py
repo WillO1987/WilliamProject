@@ -129,7 +129,7 @@ class Enemy(pygame.sprite.Sprite):
                 if distance < minDist:
                     closestTile = farmtile
                     minDist = distance
-            
+           
         if closestTile:
             if self.rect.x < closestTile.rect.x:
                 self.rect.x += 1
@@ -139,6 +139,13 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.y += 1 
             if self.rect.y > closestTile.rect.y:
                 self.rect.y -= 1 
+            
+            
+            if self.rect.x == closestTile.rect.x and self.rect.y == closestTile.rect.y:
+                game_over = True
+                Endscreen()
+
+       
     
     def calculateDist(self, x, y):
         return math.sqrt((self.rect.x - x) ** 2 + (self.rect.y - y) ** 2)
@@ -519,8 +526,8 @@ while not done:
             game_over = True
             Endscreen(score)
             break
+        
 
-    
     # --- Game logic should go here
     player_diff_x = player.diff_x
     player_diff_y = player.diff_y
