@@ -112,12 +112,13 @@ class Enemy(pygame.sprite.Sprite):
         self.damagelvl = damagelvl
         # self.rect.x = 300
         # self.rect.y = 100
-
-        self.image = pygame.Surface(([25, 25]))
-        self.image.fill(ORANGE)
+        
+        self.original_image = pygame.image.load('scary zombiesmaller.png').convert_alpha()
+        self.image = self.original_image
+        # self.image.fill(ORANGE)
         self.rect = self.image.get_rect()
-        self.rect.x = 400
-        self.rect.y = 200
+        # self.rect.x = 400
+        # self.rect.y = 200
     def update(self) :
         self.move_towards_farmtile()
     def move_towards_farmtile(self):
@@ -131,6 +132,15 @@ class Enemy(pygame.sprite.Sprite):
                     minDist = distance
            
         if closestTile:
+            dx = closestTile.rect.x - self.rect.x
+            dy = closestTile.rect.y - self.rect.y
+
+
+            if dx != 0 or dy != 0:
+                angle = math.degrees(math.atan2(-dy, dx))  # Negate dy because pygame's y-axis is inverted
+                self.image = pygame.transform.rotate(self.original_image, angle)
+                self.rect = self.image.get_rect(center=self.rect.center)  # Maintain position after rotation
+
             if self.rect.x < closestTile.rect.x:
                 self.rect.x += 1
             if self.rect.x > closestTile.rect.x:
@@ -257,13 +267,13 @@ class Gun(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     carry_Item_List = []
 
-    def __init__(self, s_width, s_length, initial_x, initial_y):
+    def __init__(self, image, initial_x, initial_y):
         super().__init__()
         self.x_val2 = x_val
-        self.width = s_width
-        self.height = s_length
-        self.image = pygame.Surface([self.width, self.height])
-        self.image.fill(GREEN), 
+        # self.width = s_width
+        # self.height = s_length
+        self.image = image
+        # self.image.fill(GREEN), 
         self.rect = self.image.get_rect()
         self.rect.x = initial_x
         self.rect.y = initial_y
@@ -417,7 +427,8 @@ zombie1 = Enemy("Zombie", 100, 1)
 enemy_list.add(zombie1)
 all_sprites.add(enemy_list)
 
-player = Player(10, 10 , x_val , y_val )
+playerimage = pygame.image.load('pixil-frame-0 (1).png').convert_alpha()
+player = Player(playerimage, x_val , y_val )
 player_sprite.add(player)
 all_sprites.add(player)
 
@@ -557,8 +568,8 @@ while not done:
     # First, clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
    
-        
-    screen.fill(FERN)
+    Backgroundimage = pygame.image.load('grass background.png').convert_alpha()
+    screen.blit(Backgroundimage,(0,0))
     
     
     
