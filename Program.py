@@ -57,12 +57,14 @@ class SEEDButton(pygame.sprite.Sprite):
         
         self.text = text
         
-        self.image = pygame.Surface([50,20 ])
+        self.image = pygame.Surface([100,40 ])
         self.image.fill(colour)
 
         self.rect = self.image.get_rect()
         self.rect.x = xcoord
         self.rect.y = ycoord
+        self.rect.x = 585
+        self.rect.y = 85
         self.single_click = Single_click # prevents when the mouse collides with button from it getting pressed multiple times.
 
 
@@ -371,8 +373,8 @@ def timer(elapsed_time):
     seconds = remaining_time % 60
     time_text = f"Time: {minutes:02}:{seconds:02}"
     font = pygame.font.Font(None, 36)
-    timer_surface = font.render(time_text, True, WHITE)
-    screen.blit(timer_surface, (10, 10))
+    timer_surface = font.render(time_text, True, BLACK)
+    screen.blit(timer_surface, (562, 50))
 #endfunction
 
 def Endscreen():
