@@ -101,7 +101,7 @@ class Block(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
-
+       
         self.rect = self.image.get_rect()
 
 #endclass
@@ -123,6 +123,7 @@ class Enemy(pygame.sprite.Sprite):
         # self.rect.y = 200
     def update(self) :
         self.move_towards_farmtile()
+        self.move_towards_player()
     def move_towards_farmtile(self):
         closestTile = None
         minDist = float('inf')
@@ -156,8 +157,45 @@ class Enemy(pygame.sprite.Sprite):
             if self.rect.x == closestTile.rect.x and self.rect.y == closestTile.rect.y:
                 game_over = True
                 Endscreen()
+        
 
-       
+
+
+    def move_towards_player(self):
+        if any(farmtile.image.get_at((0, 0)) in [YELLOW, WHITE] for farmtile in farmtile_group):
+            return # Prioritize farm tiles, do not move towards player if any valid farm tile exists
+
+        closest_player = None
+        minDist = float('inf')
+    
+        for player in player_sprite:
+            distance = self.calculateDist(player.rect.x, player.rect.y)
+            if distance < minDist:
+                closest_player = player
+                minDist = distance
+
+        if closest_player:
+            dx = closest_player.rect.x - self.rect.x
+            dy = closest_player.rect.y - self.rect.y
+
+            if dx != 0 or dy != 0:
+                angle = math.degrees(math.atan2(-dy, dx))
+                self.image = pygame.transform.rotate(self.original_image, angle)
+                self.rect = self.image.get_rect(center=self.rect.center)
+
+            if self.rect.x < closest_player.rect.x:
+                self.rect.x += 1
+            if self.rect.x > closest_player.rect.x:
+                self.rect.x -= 1
+            if self.rect.y < closest_player.rect.y:
+                self.rect.y += 1
+            if self.rect.y > closest_player.rect.y:
+                self.rect.y -= 1
+
+            if self.rect.x == closest_player.rect.x and self.rect.y == closest_player.rect.y:
+                    
+                    game_over = True
+                    Endscreen()
     
     def calculateDist(self, x, y):
         return math.sqrt((self.rect.x - x) ** 2 + (self.rect.y - y) ** 2)
@@ -174,7 +212,9 @@ class WateringCan(pygame.sprite.Sprite):
     def __init__(self, b_width , b_length):
         super().__init__()
         self.image = pygame.Surface((b_width, b_length))
-        self.image.fill(BLUE)
+        
+        self.image = pygame.image.load('can.png').convert_alpha()
+        #self.image.fill(BLUE)
         self.rect = self.image.get_rect()
     def update(self) :
         pass
@@ -186,6 +226,7 @@ class FarmTile(pygame.sprite.Sprite):
         self.color = color
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
+        # self.image = pygame.image.load('mud.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.contains_crop = False
         self.isreadytoharvest = False
@@ -195,6 +236,7 @@ class FarmTile(pygame.sprite.Sprite):
     def update(self):
         if self.color == YELLOW:
             self.contains_crop = True
+
             
         
     def growcrop(self):
@@ -218,7 +260,11 @@ class Seed(pygame.sprite.Sprite):
         super().__init__()
         self.type = type
         self.image = pygame.Surface([Swidth,Sheight])
+        
+        
+        
         self.image.fill(YELLOW)
+        self.image = pygame.image.load('seed1.png').convert_alpha()
         self.rect = self.image.get_rect()
 #endclass
     def grow(self):
@@ -231,6 +277,7 @@ class Seed(pygame.sprite.Sprite):
 class Wheat(pygame.sprite.Sprite):
     def __init__(self, type, growtime):
         self.type = type
+        
         self.growtime = growtime
     
     #endclass
@@ -282,6 +329,7 @@ class Player(pygame.sprite.Sprite):
         self.diff_x = 0
         self.diff_y = 0
         self.Gun = Gun()
+        self.health = 5
 
         
     def update(self):
@@ -413,6 +461,7 @@ for row in range(grid_rows):
         y = row * (tile_size + grid_spacing) + 100
         
         # Create Farmtile sprite
+        #farmtile_picture = pygame.image.load('mud.png').convert_alpha()
         farmtile = FarmTile(BROWN, tile_size, tile_size)
         farmtile.rect.x = x
         farmtile.rect.y = y
