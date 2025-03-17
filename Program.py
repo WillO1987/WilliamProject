@@ -82,7 +82,9 @@ class SEEDButton(pygame.sprite.Sprite):
             if self.rect.collidepoint(mouse_x, mouse_y):
                 if not self.clicked:
                     seed = Seed("Wheat", 15, 15)
-                    seed.rect.topleft = (600, 15)
+                    seed.rect.x = random.randrange(screen_width)
+                    seed.rect.y = random.randrange(screen_height)
+                    # seed.rect.topleft = (500, 25)
                     block_list.add(seed)
                     all_sprites.add(seed)
                     self.clicked = True
@@ -98,9 +100,10 @@ class Block(pygame.sprite.Sprite):
 
         # Call the parent class (Sprite) constructor
         super().__init__()
-
-        self.image = pygame.Surface([width, height])
-        self.image.fill(color)
+        
+        #self.image.fill(color)
+        self.image =  pygame.image.load('tree.png').convert_alpha()
+        
        
         self.rect = self.image.get_rect()
 
@@ -495,17 +498,16 @@ Sbutton1 = SEEDButton(550, 100, "Seed", YELLOW, True)
 enemy1 = Enemy(5, 1, 4)
 enemy_list.add(enemy1)
 all_sprites.add(enemy_list)
-for i in range(1):
-    # This represents a block
-    block = Block(BLACK, 15, 15)
 
-    # Set a random location for the block
-    block.rect.x = random.randrange(200 , screen_width)
-    block.rect.y = random.randrange(200 , screen_height)
+# # This represents a block
+# block = Block(BLACK, 15, 15)
 
-    # Add the block to the list of objects
-    block_list.add(block)
-    all_sprites.add(block)
+# block.rect.x = 400
+# block.rect.y = 300
+
+# block_list.add(block)
+# all_sprites.add(block)
+# wall_list.add(block)
     
 def water_collision(watering_can, farmtile_group):
     collided_tiles = pygame.sprite.spritecollide(watering_can, farmtile_group, False)
