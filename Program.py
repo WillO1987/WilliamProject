@@ -443,6 +443,21 @@ def Endscreen():
     pygame.time.wait(3000)
 
 
+def StartScreen():
+
+    screen.fill(WHITE)
+    font = pygame.font.Font(None, 74)
+    text_surface = font.render("Press Space to begin!!!", True, BLUE)
+    instruction_surface = font.render(f"How to play: Move the Player using the W A S D keys. Press Space to pick up items and backspace to drop items/Use them. Press H to harvest crops. Click in the direction of enemies to shoot bullets at them! ENJOY!", True, BLUE)
+    # Center the text
+    text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
+    score_rect = instruction_surface.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+
+    screen.blit(text_surface, text_rect)
+    screen.blit(instruction_surface, score_rect)
+    pygame.display.flip()
+    pygame.time.wait(3000)
+
 all_sprites = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 block_list = pygame.sprite.Group()
@@ -546,6 +561,9 @@ while not done:
     current_ticks = pygame.time.get_ticks()
     elapsed_time = (current_ticks- start_time)// 1000
     for event in pygame.event.get(): # User did something
+        if elapsed_time == 0:
+            StartScreen()
+       
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.MOUSEBUTTONDOWN:
