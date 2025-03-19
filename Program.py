@@ -444,19 +444,34 @@ def Endscreen():
 
 
 def StartScreen():
+    
+    while True:
+        screen.fill(WHITE)
+        font = pygame.font.Font(None, 74)
+        text_surface = font.render("Press Space to begin!!!", True, BLUE)
+        instruction_surface = font.render(f"How to play: Move the Player using the W A S D keys. Press Space to pick up items and backspace to drop items/Use them. Press H to harvest crops. Click in the direction of enemies to shoot bullets at them! ENJOY!", True, BLUE)
+        # Center the text
+        text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
+        score_rect = instruction_surface.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
 
-    screen.fill(WHITE)
-    font = pygame.font.Font(None, 74)
-    text_surface = font.render("Press Space to begin!!!", True, BLUE)
-    instruction_surface = font.render(f"How to play: Move the Player using the W A S D keys. Press Space to pick up items and backspace to drop items/Use them. Press H to harvest crops. Click in the direction of enemies to shoot bullets at them! ENJOY!", True, BLUE)
-    # Center the text
-    text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
-    score_rect = instruction_surface.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+        screen.blit(text_surface, text_rect)
+        screen.blit(instruction_surface, score_rect)
+        pygame.display.flip()
+        
 
-    screen.blit(text_surface, text_rect)
-    screen.blit(instruction_surface, score_rect)
-    pygame.display.flip()
-    pygame.time.wait(3000)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                return  #exit function to start main game loop
+    #endwhile
+    
+
+    
+                    
+
+
 
 all_sprites = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
@@ -554,23 +569,23 @@ def wavesspawning():
         enemy.rect.y = y
         enemy_list.add(enemy)
         all_sprites.add(enemy)
-
+        
+StartScreen()
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
     current_ticks = pygame.time.get_ticks()
     elapsed_time = (current_ticks- start_time)// 1000
+    
+            
     for event in pygame.event.get(): # User did something
-        if elapsed_time == 0:
-            StartScreen()
-       
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.MOUSEBUTTONDOWN:
             target_x, target_y = pygame.mouse.get_pos()
             player.fire_gun(target_x, target_y)
         elif event.type == pygame.KEYDOWN:
-
+    
             if event.key == pygame.K_SPACE:
                 player.carry_Item_List = player.carry_Item_List
                 if len(player.carry_Item_List) >=1:
@@ -597,6 +612,7 @@ while not done:
                 player.harvest()
                     # score += 20
             
+        
         
     
         if current_ticks - lastwave >= waveIntervals:
