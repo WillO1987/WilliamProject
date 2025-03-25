@@ -449,13 +449,31 @@ def StartScreen():
         screen.fill(WHITE)
         font = pygame.font.Font(None, 74)
         text_surface = font.render("Press Space to begin!!!", True, BLUE)
-        instruction_surface = font.render(f"How to play: Move the Player using the W A S D keys. Press Space to pick up items and backspace to drop items/Use them. Press H to harvest crops. Click in the direction of enemies to shoot bullets at them! ENJOY!", True, BLUE)
         # Center the text
-        text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
-        score_rect = instruction_surface.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+        text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+         
+        instr_font = pygame.font.Font(None, 28)
+        instructions = [
+            "How to play:",
+            " - Move with W A S D.",
+            " - Press Space to pick up items.",
+            " - Press Backspace to drop or use items.",
+            " - Press H to harvest crops.",
+            " - Click in the direction of enemies to shoot!",
+            "ENJOY!"
+        ]
+        
+        # Draw each line separately
+        y_offset = screen_height // 2 - 50  # Starting position for text
+        for line in instructions:
+            instruction_surface = instr_font.render(line, True, BLUE)
+            instr_rect = instruction_surface.get_rect(center=(screen_width // 2, y_offset))
+            screen.blit(instruction_surface, instr_rect)
+            y_offset += 30  # Move down for the next line
+
 
         screen.blit(text_surface, text_rect)
-        screen.blit(instruction_surface, score_rect)
+       
         pygame.display.flip()
         
 
@@ -569,7 +587,7 @@ def wavesspawning():
         enemy.rect.y = y
         enemy_list.add(enemy)
         all_sprites.add(enemy)
-        
+
 StartScreen()
 # -------- Main Program Loop -----------
 while not done:
