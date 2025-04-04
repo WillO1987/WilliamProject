@@ -130,6 +130,7 @@ class Enemy(pygame.sprite.Sprite):
     def move_towards_farmtile(self):
         closestTile = None
         minDist = float('inf')
+        # Find the closest valid farm tile (yellow or white in color)
         for farmtile in farmtile_group:
             if farmtile.image.get_at((0, 0)) == YELLOW or farmtile.image.get_at((0, 0)) == WHITE:
                 distance = self.calculateDist(farmtile.rect.x, farmtile.rect.y)
@@ -138,6 +139,7 @@ class Enemy(pygame.sprite.Sprite):
                     minDist = distance
            
         if closestTile:
+            # Calculate movement direction towards the closest farm tile
             dx = closestTile.rect.x - self.rect.x
             dy = closestTile.rect.y - self.rect.y
 
@@ -156,7 +158,7 @@ class Enemy(pygame.sprite.Sprite):
             if self.rect.y > closestTile.rect.y:
                 self.rect.y -= 1 
             
-            
+            # If enemy reaches the farm tile, trigger game over
             if self.rect.x == closestTile.rect.x and self.rect.y == closestTile.rect.y:
                 game_over = True
                 Endscreen()
@@ -171,6 +173,8 @@ class Enemy(pygame.sprite.Sprite):
         closest_player = None
         minDist = float('inf')
     
+
+        # Find the closest player
         for player in player_sprite:
             distance = self.calculateDist(player.rect.x, player.rect.y)
             if distance < minDist:
@@ -182,6 +186,7 @@ class Enemy(pygame.sprite.Sprite):
             dy = closest_player.rect.y - self.rect.y
 
             if dx != 0 or dy != 0:
+                # Rotate enemy to face the movement direction
                 angle = math.degrees(math.atan2(-dy, dx))
                 self.image = pygame.transform.rotate(self.original_image, angle)
                 self.rect = self.image.get_rect(center=self.rect.center)
@@ -196,11 +201,12 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.y -= 1
 
             if self.rect.x == closest_player.rect.x and self.rect.y == closest_player.rect.y:
-                    
+                    # If enemy reaches the player, trigger game over
                     game_over = True
                     Endscreen()
     
     def calculateDist(self, x, y):
+        # Calculate Euclidean distance between enemy and given (x, y) coordinates
         return math.sqrt((self.rect.x - x) ** 2 + (self.rect.y - y) ** 2)
             
 
@@ -237,6 +243,7 @@ class FarmTile(pygame.sprite.Sprite):
         
     #endconstructor
     def update(self):
+        #if the colour is yellow then the crop is planted
         if self.color == YELLOW:
             self.contains_crop = True
 
@@ -248,6 +255,7 @@ class FarmTile(pygame.sprite.Sprite):
             self.image.fill(WHITE) 
     def harvestcrop(self):
         if self.isreadytoharvest:
+            # resets all the attributes
             self.contains_crop = False
             self.watered = False
             self.isreadytoharvest = False
@@ -297,8 +305,10 @@ class Bullet(pygame.sprite.Sprite):
          self.angle = angle 
          self.speed = 10
      def update(self):
+        #calculates bullet angle and direction factoring in its speed
         self.rect.x += self.speed * math.cos(self.angle)
         self.rect.y += self.speed * math.sin(self.angle)
+        #if seed leaves the screen its killed to save memory
         if self.rect.right < 0 or self.rect.left > screen_width or self.rect.bottom < 0 or self.rect.top > screen_height:
             self.kill()
 
@@ -341,6 +351,7 @@ class Player(pygame.sprite.Sprite):
         self.diff_x = 0
         self.diff_y = 0
         if keys[pygame.K_LEFT]:
+            #set to change by 2 in each key pressed 
             self.diff_x -= 2
         if keys[pygame.K_RIGHT]:
             self.diff_x += 2
@@ -357,7 +368,7 @@ class Player(pygame.sprite.Sprite):
             item.rect.x += self.diff_x
             item.rect.y += self.diff_y
         
-
+        #calls the bullet update method
         self.Gun.bullets.update()
         
         # Check for collisions with walls
@@ -371,15 +382,19 @@ class Player(pygame.sprite.Sprite):
                 self.rect.bottom = wall.rect.top
             elif moveUp < 0:
                 self.rect.top = wall.rect.bottom
+
     def fire_gun(self, target_x, target_y): 
+        # Fire the gun towards a target (x, y) position
         self.Gun.fire(self.rect.centerx, self.rect.centery, target_x, target_y)
 
     def harvest(self):
         global score
         global farmtile
+        # Check for collisions with farm tiles
         collided_tiles = pygame.sprite.spritecollide(self, farmtile_group, False)
         for farmtile in collided_tiles:
                 if farmtile.watered ==  True and farmtile.isreadytoharvest:
+                    # If the farm tile is watered and ready to harvest then continue with harvesting
                     farmtile.harvestcrop()
                     score += 20
 
@@ -420,17 +435,23 @@ elapsed_time = 0
 
 def timer(elapsed_time):
     remaining_time = max(start_time - elapsed_time, 0)
+    # Convert remaining time into minutes and seconds
     minutes = remaining_time // 60
     seconds = remaining_time % 60
+
+    # Format the time text in "MM:SS" format
     time_text = f"Time: {minutes:02}:{seconds:02}"
     font = pygame.font.Font(None, 36)
+    # Create a surface with the time text
     timer_surface = font.render(time_text, True, BLACK)
     screen.blit(timer_surface, (562, 50))
 #endfunction
 
 def Endscreen():
+    # Fill the screen with a white color to reset background
     screen.fill(BLACK)
     font = pygame.font.Font(None, 74)
+    #Create a surface with the score text
     text_surface = font.render("Game Over", True, WHITE)
     score_surface = font.render(f"Final Score: {score}", True, WHITE)
     # Center the text
@@ -440,12 +461,15 @@ def Endscreen():
     screen.blit(text_surface, text_rect)
     screen.blit(score_surface, score_rect)
     pygame.display.flip()
+    # Wait for 3 seconds before closing or restarting
     pygame.time.wait(3000)
 
 
+# Start screen function that displays instructions and waits for user input to start the game
 def StartScreen():
     
     while True:
+        # Fill the screen with a white color to reset background
         screen.fill(WHITE)
         font = pygame.font.Font(None, 74)
         text_surface = font.render("Press Space to begin!!!", True, BLUE)
@@ -476,11 +500,12 @@ def StartScreen():
        
         pygame.display.flip()
         
-
+# Check for events (like user input)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+            # If the player presses the Spacebar, exit the start screen and start the game
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 return  #exit function to start main game loop
     #endwhile
@@ -558,7 +583,9 @@ all_sprites.add(enemy_list)
 # wall_list.add(block)
     
 def water_collision(watering_can, farmtile_group):
+        # Check for collisions between the watering can and all farm tiles in the farmtile_group
     collided_tiles = pygame.sprite.spritecollide(watering_can, farmtile_group, False)
+    # Loop through all the farm tiles that collided with the watering can
     for farmtile in collided_tiles:
         farmtile.watered = True
 
